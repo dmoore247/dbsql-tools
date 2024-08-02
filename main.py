@@ -53,7 +53,9 @@ TOKEN = dbutils.notebook.entry_point.getDbutils().notebook().getContext().apiTok
 # MAGIC * This template is stored in the user's workspace location.
 # MAGIC * All dashboard assets for each user are also saved in their respective workspace locations.
 # MAGIC
-# MAGIC A link to the dashboard draft will be provided, and direct you to the dashboard. Click on the top to publish the dashboard and share it with other users.
+# MAGIC A link to the dashboard draft will be provided, and direct you to the dashboard. 
+# MAGIC
+# MAGIC Click on the top to publish the dashboard and share it with other users.
 # MAGIC
 # MAGIC
 
@@ -62,6 +64,11 @@ TOKEN = dbutils.notebook.entry_point.getDbutils().notebook().getContext().apiTok
 user_name = dbutils.notebook.entry_point.getDbutils().notebook().getContext().userName().get()
 lv_workspace_path = f"/Users/{user_name}"
 lv_dashboard_name = "Better SQL for Customers"
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC **TODO** - Add warehouse to run dashboard
 
 # COMMAND ----------
 
@@ -111,8 +118,6 @@ metastore_id = input("Provide metastore_id for this workspace: ")
 # COMMAND ----------
 
 # DBTITLE 1,Enable system tables
-
-
 def enable_schema(schema_name):
     endpoint = f"https://{HOSTNAME}/api/2.1/unity-catalog/metastores/{metastore_id}/systemschemas/{schema_name}"
 
@@ -138,7 +143,13 @@ users = input("Provide list of users to grant access to system tables, separatin
 # COMMAND ----------
 
 users_list = [user.strip() for user in users.split(",")]
+print(users_list)
 
 for user in users_list:
   for table in required_system_tables:
-    spark.sql(f"GRANT SELECT ON TABLE {table} TO `{user}`")
+    query = f"GRANT SELECT ON TABLE {table} TO `{user}`"
+    spark.sql(query)
+
+# COMMAND ----------
+
+
