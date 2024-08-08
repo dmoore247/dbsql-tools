@@ -2,7 +2,7 @@
 import base64
 import json
 import re
-
+from databricks.sdk import WorkspaceClient
 import requests
 
 
@@ -15,6 +15,8 @@ class LakeviewDashManager:
         self.url_base = f"https://{self.host}/api/2.0/workspace"
         self.headers = {"Authorization": f"Bearer {self.token}"}
         self.lakeview_json = None
+        self.dashboard_id = None
+        w = WorkspaceClient()
 
     def list_content(self, path):
         """List out the content from the path of a workspace
@@ -67,6 +69,23 @@ class LakeviewDashManager:
             raise Exception(f"Unexpected status code: {response.status_code}")
         return self.get_dashboard_links(path, dashboard_name)
     
+    def create_dash(self, path, dashboard_name, warehouse_id=None):
+        dashboard = w.lakeview.create(
+            display_name=dashboard_name, 
+            parent_path=path, 
+            serialized_dashboard=json.dumps(self.lakeview_json),
+            # warehouse_id=
+            )
+        self.dashboard_id = dashboard.dashboard_id
+        return self.get_dashboard_links(self.dashboard_id)
+    
+    def update_dash(self):
+        dashboard = w.lakeview.update(
+            dashboard_id=self.dashboard_id,
+            serialized_dashboard=json.dumps(self.lakeview_json)
+            )
+        return self.get_dashboard_links(self.dashboard_id)
+    
     def save_dash_local(self, path):
         """save lakeview dashboard json to local file
 
@@ -99,7 +118,7 @@ class LakeviewDashManager:
             item["query"] = re.sub(r"SCHEMA_NAME", schema_name, item["query"])
             item["query"] = re.sub(r"TABLE_NAME", table_name, item["query"])
 
-    def get_dashboard_links(self, path, dashboard_name):
+    def get_dashboard_links(self, dashboard_id):
         """Get the dashboard_id based on workspace path of a dashboard
         http link follows the format of {workspace_host}/sql/dashboardsv3/{dashboard_id}
         

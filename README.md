@@ -1,7 +1,7 @@
 # Databricks DBSQL - Better SQL For Customer
 
 ## Purpose
-Databricks customers have been eager for data warehousing solutions on their cloud lake house. In the early days of Big Data on public clouds, data warehousing options were quite limited. Now, DBSQL Serverless is Databricks’ top SQL product in term of both performance and cost.
+Databricks customers have been eager for data warehousing solutions on their cloud data lakehouse. In the early days of Big Data on public clouds, data warehousing options were quite limited. Now, DBSQL Serverless is Databricks’ top SQL product in term of both performance and cost.
 
 <img width="661" alt="image" src="https://github.com/user-attachments/assets/6978e97a-d76e-4949-bcbf-ff7c45b04276">
 
@@ -25,17 +25,12 @@ If the workspace lacks the required system table schemas, an account admin can r
 
 ## Installation
 
-1. [Clone](https://docs.databricks.com/en/repos/git-operations-with-repos.html#run-git-operations-on-databricks-git-folders-repos) this repo to Databricks workspace
-2. Open the `main` notebook
-3. Execute all cells in the "Set Up" section.
-4. Verify if the system schemas (access, compute, billing) are enabled in your workspace:
-  * If enabled, proceed to Step 2: Create Dashboard.
-  * If not enabled:
-    * Proceed to Step 3: Enable System Tables (ensure an account admin is available to perform this step).
-    * Then return to Step 2.
+1. Clone this repo to Databricks workspace. 
+  * Refer to this [documentation](https://docs.databricks.com/en/repos/git-operations-with-repos.html#run-git-operations-on-databricks-git-folders-repos) on how to use Git repo on Databricks. 
+2. Follow the instruction in the `main` notebook
 
 ## Output
 
-A dashboard will be generated to identify SQL workloads running on Interactive Clusters (which is an anti-pattern)
+A dashboard will be generated to identify SQL workloads running on Interactive Clusters similar to below:
 
 <img width="661" alt="image" src="https://github.com/anhhchu/dbsql-tools/blob/main/sample%20dashboard.png?raw=true">
