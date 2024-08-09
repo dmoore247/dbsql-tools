@@ -8,7 +8,7 @@
     {
       "name": "30567c7e",
       "displayName": "sql_clusters",
-      "query": "-- List of clusters with the highest SQL commands and DBI usage over the last 30 days\nWITH sql_clusters as (\n    SELECT a.workspace_id,\n        request_params.clusterId,\n        count(1) as commands,\n        count_if(request_params.commandLanguage = 'sql') as sql_commands,\n        -- count_if(request_params.commandLanguage <> 'sql') as non_sql_commands,\n        round(sql_commands/commands*100.,1) as sql_percentage,\n        u.dbus\n    FROM system.access.audit a\n    JOIN  system.compute.clusters c \n    ON c.delete_time is NULL \n    AND a.request_params.clusterId = c.cluster_id \n    AND a.workspace_id = c.workspace_id\n    LEFT OUTER JOIN (\n        select usage_metadata.cluster_id, sum(usage_quantity) dbus\n        from system.billing.usage\n        WHERE usage_date > date_sub(now(), 30)\n        GROUP BY ALL) u ON a.request_params.clusterId = u.cluster_id\n    WHERE \n    a.event_date > date_sub(now(), 30)\n    and a.service_name = 'notebook'\n    and a.action_name = 'runCommand'\n    and contains(a.request_params.clusterId, '-')\n    GROUP BY a.workspace_id, request_params.clusterId, c.cluster_source, u.dbus\n    HAVING sql_percentage >= 90.0\n    ORDER BY sql_percentage DESC\n    LIMIT 100\n),\ncurrent_clusters AS (\n  SELECT \n    cs.cluster_id,\n    '<a target=\"_blank\" href=\"/compute/clusters/'||cluster_id||'?o='||workspace_id||'\">'||cluster_name||'</a>' as cluster_name,\n    cs.cluster_source,\n    cs.dbr_version,\n    cs.owned_by,\n    RANK() OVER (PARTITION BY cluster_id ORDER BY change_time DESC) AS rank\n  FROM system.compute.clusters cs\n)\nSELECT\n  sc.workspace_id,\n  sc.clusterId,\n  cc.cluster_name,\n  cc.cluster_source,\n  cc.dbr_version,\n  cc.owned_by,\n  sc.commands,\n  sc.sql_commands,\n  sc.sql_percentage,\n  sc.dbus,\n  sc.dbus * :interactive_dbu_cost as interactive_dollar_dbus,\n  sc.dbus * :dbsql_cost as dbsql_dollar_dbus\nFROM sql_clusters sc\nJOIN current_clusters cc ON sc.clusterId = cc.cluster_id AND cc.rank = 1\nORDER BY sql_percentage*dbus DESC",
+      "query": "-- List of clusters with the highest SQL commands and DBI usage over the last 30 days\nWITH sql_clusters as (\n    SELECT a.workspace_id,\n        request_params.clusterId,\n        count(1) as commands,\n        count_if(request_params.commandLanguage = 'sql') as sql_commands,\n        -- count_if(request_params.commandLanguage <> 'sql') as non_sql_commands,\n        round(sql_commands/commands*100.,1) as sql_percentage,\n        u.dbus\n    FROM system.access.audit a\n    JOIN  system.compute.clusters c \n    ON c.delete_time is NULL \n    AND a.request_params.clusterId = c.cluster_id \n    AND a.workspace_id = c.workspace_id\n    LEFT OUTER JOIN (\n        select usage_metadata.cluster_id, sum(usage_quantity) dbus\n        from system.billing.usage\n        WHERE usage_date > date_sub(now(), 30)\n        GROUP BY ALL) u ON a.request_params.clusterId = u.cluster_id\n    WHERE \n    a.event_date > date_sub(now(), 30)\n    and a.service_name = 'notebook'\n    and a.action_name = 'runCommand'\n    and contains(a.request_params.clusterId, '-')\n    GROUP BY a.workspace_id, request_params.clusterId, c.cluster_source, u.dbus\n    HAVING sql_percentage >= 90.0\n    ORDER BY sql_percentage DESC\n    LIMIT 100\n),\ncurrent_clusters AS (\n  SELECT \n    cs.cluster_id,\n    cluster_name,\n    '<a target=\"_blank\" href=\"/compute/clusters/'||cluster_id||'?o='||workspace_id||'\">'||cluster_name||'</a>' as cluster_link,\n    cs.cluster_source,\n    cs.dbr_version,\n    cs.owned_by,\n    RANK() OVER (PARTITION BY cluster_id ORDER BY change_time DESC) AS rank\n  FROM system.compute.clusters cs\n)\nSELECT\n  sc.workspace_id,\n  sc.clusterId,\n  cc.cluster_name,\n  cc.cluster_link,\n  cc.cluster_source,\n  cc.dbr_version,\n  cc.owned_by,\n  sc.commands,\n  sc.sql_commands,\n  sc.sql_percentage,\n  sc.dbus,\n  sc.dbus * :interactive_dbu_cost as interactive_dollar_dbus,\n  sc.dbus * :dbsql_cost as dbsql_dollar_dbus\nFROM sql_clusters sc\nJOIN current_clusters cc ON sc.clusterId = cc.cluster_id AND cc.rank = 1\nORDER BY sql_percentage*dbus DESC",
       "parameters": [
         {
           "displayName": "interactive_dbu_cost",
@@ -381,7 +381,7 @@
           },
           "position": {
             "x": 0,
-            "y": 16,
+            "y": 27,
             "width": 6,
             "height": 8
           }
@@ -789,15 +789,15 @@
           },
           "position": {
             "x": 0,
-            "y": 7,
+            "y": 6,
             "width": 6,
-            "height": 7
+            "height": 6
           }
         },
         {
           "widget": {
             "name": "4f386fe7",
-            "textbox_spec": "# Better SQL for Customers\nThis Dashboard will help identify high SQL usage for Interactive clusters, which is an anti-pattern. These SQL workloads would be better served via the specialized DBSQL Warehouse endpoints.\n ![Move to the right](https://github.com/user-attachments/assets/6978e97a-d76e-4949-bcbf-ff7c45b04276)\n\n- Deploy this Lakeview dashboard to customer's account.\n\n- Ensure system schemas (system.access, system.billing, and system.compute.*) [are enabled and accessible ](https://docs.databricks.com/en/admin/system-tables/index.html#enable-a-system-schema)\n"
+            "textbox_spec": "# Better SQL for Customers\nThis Dashboard will help identify high SQL usage for Interactive clusters, which is an anti-pattern. These SQL workloads would be better served via the specialized DBSQL Warehouse endpoints.\n![Move to the right](https://github.com/user-attachments/assets/6978e97a-d76e-4949-bcbf-ff7c45b04276)\n\n- Deploy this Lakeview dashboard to customer's account.\n\n- Ensure system schemas (system.access, system.billing, and system.compute.*) [are enabled and accessible ](https://docs.databricks.com/en/admin/system-tables/index.html#enable-a-system-schema)\n"
           },
           "position": {
             "x": 0,
@@ -993,7 +993,7 @@
           },
           "position": {
             "x": 0,
-            "y": 30,
+            "y": 41,
             "width": 6,
             "height": 6
           }
@@ -1005,7 +1005,7 @@
           },
           "position": {
             "x": 0,
-            "y": 14,
+            "y": 25,
             "width": 6,
             "height": 2
           }
@@ -1017,7 +1017,7 @@
           },
           "position": {
             "x": 0,
-            "y": 24,
+            "y": 35,
             "width": 6,
             "height": 6
           }
@@ -1065,16 +1065,17 @@
               },
               "frame": {
                 "showTitle": true,
-                "title": "All in Interactive cost $",
-                "showDescription": true
+                "title": "Interactive SQL $",
+                "showDescription": true,
+                "description": "All inclusive Interactive All Purpose Cluster SQL $/hr"
               }
             }
           },
           "position": {
             "x": 0,
-            "y": 6,
+            "y": 15,
             "width": 3,
-            "height": 1
+            "height": 2
           }
         },
         {
@@ -1106,11 +1107,6 @@
                   }
                 ]
               },
-              "frame": {
-                "showTitle": true,
-                "title": "All in DBSQL cost $",
-                "showDescription": true
-              },
               "selection": {
                 "defaultSelection": {
                   "values": {
@@ -1122,14 +1118,105 @@
                     ]
                   }
                 }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "DBSQL cost $",
+                "showDescription": true,
+                "description": "All inclusive DBSQL cost"
               }
             }
           },
           "position": {
             "x": 3,
-            "y": 6,
+            "y": 15,
             "width": 3,
-            "height": 1
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "bab8bc8b",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "30567c7e",
+                  "fields": [
+                    {
+                      "name": "clusterId",
+                      "expression": "`clusterId`"
+                    },
+                    {
+                      "name": "interactive_dollar_dbus",
+                      "expression": "`interactive_dollar_dbus`"
+                    },
+                    {
+                      "name": "dbsql_dollar_dbus",
+                      "expression": "`dbsql_dollar_dbus`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "clusterId",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  },
+                  "displayName": "Cluster"
+                },
+                "y": {
+                  "fields": [
+                    {
+                      "fieldName": "interactive_dollar_dbus",
+                      "displayName": "Interactive $DBUs"
+                    },
+                    {
+                      "fieldName": "dbsql_dollar_dbus",
+                      "displayName": "DBSQL $DBUs"
+                    }
+                  ],
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showDescription": false,
+                "title": "Table of sql_clusters data",
+                "showTitle": true
+              },
+              "mark": {
+                "layout": "group"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 17,
+            "width": 6,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "2e1d88bf",
+            "textbox_spec": "## Compare costs between Interactive SQL and DBSQL\nProvide rough estimate of cost differential between Interactive SQL (All purpose clusters) and DBSQL\n- Calculate off line $/DBU for Interactive SQL, include Cloud VM costs, network,...\n- Calculate DBSQL costs, Serverless DBSQL is one list (or discounted) price."
+          },
+          "position": {
+            "x": 0,
+            "y": 12,
+            "width": 6,
+            "height": 3
           }
         }
       ]

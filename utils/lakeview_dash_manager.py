@@ -74,17 +74,17 @@ class LakeviewDashManager:
             display_name=dashboard_name, 
             parent_path=path, 
             serialized_dashboard=json.dumps(self.lakeview_json),
-            # warehouse_id=
+            warehouse_id=warehouse_id
             )
-        self.dashboard_id = dashboard.dashboard_id
-        return self.get_dashboard_links(self.dashboard_id)
+        dashboard_id = dashboard.dashboard_id
+        return f"https://{self.host}/sql/dashboardsv3/{dashboard_id}"
     
-    def update_dash(self):
+    def update_dash(self, dashboard_id):
         dashboard = w.lakeview.update(
-            dashboard_id=self.dashboard_id,
+            dashboard_id=dashboard_id,
             serialized_dashboard=json.dumps(self.lakeview_json)
             )
-        return self.get_dashboard_links(self.dashboard_id)
+        return f"https://{self.host}/sql/dashboardsv3/{dashboard_id}"
     
     def save_dash_local(self, path):
         """save lakeview dashboard json to local file
@@ -118,7 +118,7 @@ class LakeviewDashManager:
             item["query"] = re.sub(r"SCHEMA_NAME", schema_name, item["query"])
             item["query"] = re.sub(r"TABLE_NAME", table_name, item["query"])
 
-    def get_dashboard_links(self, dashboard_id):
+    def get_dashboard_links(self, path, dashboard_name):
         """Get the dashboard_id based on workspace path of a dashboard
         http link follows the format of {workspace_host}/sql/dashboardsv3/{dashboard_id}
         

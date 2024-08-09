@@ -33,4 +33,4 @@ If the workspace lacks the required system table schemas, an account admin can r
 
 A dashboard will be generated to identify SQL workloads running on Interactive Clusters similar to below:
 
-<img width="661" alt="image" src="https://github.com/anhhchu/dbsql-tools/blob/main/sample%20dashboard.png?raw=true">
+<img width="661" alt="image" src="https://github.com/anhhchu/dbsql-tools/blob/main/sample_dashboard.png?raw=true">

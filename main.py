@@ -27,7 +27,7 @@
 
 # COMMAND ----------
 
-# MAGIC %pip install --upgrade databricks-sdk
+# MAGIC %pip install --quiet --upgrade databricks-sdk 
 # MAGIC dbutils.library.restartPython()
 
 # COMMAND ----------
@@ -73,16 +73,15 @@ template_path = "./utils/Better SQL for Customers.lvdash.json"
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC **TODO** - Add warehouse to run dashboard
-
-# COMMAND ----------
-
 # DBTITLE 1,Generate dashboard
 lv_api = LakeviewDashManager(host=HOSTNAME, token=TOKEN)
 lv_api.load_dash_local(template_path)
-dashboard_link = lv_api.import_dash(path=lv_workspace_path, dashboard_name=lv_dashboard_name)
-print(f"The Dashboard Draft is ready at: {dashboard_link}. \nClick ‘Publish’ to make it live and share it with others.")
+try: 
+  # dashboard_link = lv_api.import_dash(path=lv_workspace_path, dashboard_name=lv_dashboard_name)
+  dashboard_link = lv_api.import_dash(path=lv_workspace_path, dashboard_name=lv_dashboard_name)
+  print(f"The Dashboard Draft is ready at: {dashboard_link}. \nClick ‘Publish’ to make it live and share it with others.")
+except Exception as e:
+  print(e)
 
 # COMMAND ----------
 
@@ -124,20 +123,6 @@ metastore_id = input("Provide metastore_id for this workspace: ")
 # COMMAND ----------
 
 # DBTITLE 1,Enable system tables
-# def enable_schema(schema_name):
-#     endpoint = f"https://{HOSTNAME}/api/2.1/unity-catalog/metastores/{metastore_id}/systemschemas/{schema_name}"
-
-#     headers = {
-#         "Authorization": f"Bearer {TOKEN}",
-#         "Content-Type": "application/json"
-#     }
-
-#     response = requests.put(endpoint, headers=headers)
-#     if response.status_code == 200:
-#         print(f"System schema {schema_name} enabled successfully.")
-#     else:
-#         print(f"Failed to enable system schema {schema_name}. Status code: {response.status_code}, Message: {response.text}")
-
 for schema_name in required_system_schemas:
     w.system_schemas.enable(metastore_id=metastore_id, schema_name=schema_name)
 
