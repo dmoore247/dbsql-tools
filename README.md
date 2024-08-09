@@ -13,8 +13,7 @@ This tool automatically generates a dashboard to identify SQL workloads running 
 
 * Databricks workspace with Unity Catalog and 3 system table schemas (access, billing, compute) enabled
 * The user executing this tool needs the following permissions:
-  1. Permission to [create DBSQL warehouse](https://docs.databricks.com/en/compute/sql-warehouse/create.html) 
-  2. SELECT permission to below system tables:
+  SELECT permission to below system tables:
     * system.access (audit table)
     * system.billing (usage table)
     * system.compute and (cluster and node_timeline tables)
