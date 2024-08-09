@@ -92,9 +92,7 @@ except Exception as e:
 # MAGIC
 # MAGIC **Note:** Only an account admin can run these cells.
 # MAGIC
-# MAGIC Account admin will be prompted to input the metastore_id under Catalog Explorer setting
-# MAGIC
-# MAGIC The account admin will also be prompted to provide a list of email addresses to grant SELECT access to these system tables.
+# MAGIC Account admin will be prompted to provide a list of email addresses to grant SELECT access to these system tables.
 # MAGIC
 # MAGIC ---
 # MAGIC
@@ -114,11 +112,7 @@ except Exception as e:
 
 required_system_tables = ["system.access.audit", "system.compute.clusters", "system.billing.usage"]
 required_system_schemas = ["compute", "access"]
-
-# COMMAND ----------
-
-# DBTITLE 1,Input metastore_id
-metastore_id = input("Provide metastore_id for this workspace: ")
+metastore_id = w.metastores.current().metastore_id
 
 # COMMAND ----------
 
@@ -140,7 +134,3 @@ for user in users_list:
   for table in required_system_tables:
     query = f"GRANT SELECT ON TABLE {table} TO `{user}`"
     spark.sql(query)
-
-# COMMAND ----------
-
-
