@@ -69,7 +69,7 @@ TOKEN = dbutils.notebook.entry_point.getDbutils().notebook().getContext().apiTok
 user_name = dbutils.notebook.entry_point.getDbutils().notebook().getContext().userName().get()
 lv_workspace_path = f"/Users/{user_name}"
 lv_dashboard_name = "Better SQL for Customers"
-template_path = "./utils/Better SQL for Customers.lvdash.json"
+template_path = "./Better SQL for Customers.lvdash.json"
 
 # COMMAND ----------
 
