@@ -5,7 +5,7 @@ Databricks customers have been eager for data warehousing solutions on their clo
 
 <img width="661" alt="image" src="https://github.com/user-attachments/assets/6978e97a-d76e-4949-bcbf-ff7c45b04276">
 
-This tool automatically generates a dashboard to identify SQL workloads running on Interactive Clusters, which would be more efficiently managed by a more specialized DBSQL Warehouse endpoints.
+This tool automatically generates a dashboard to identify SQL workloads running on Interactive Clusters, which would be more efficiently managed by more specialized DBSQL Warehouse endpoints.
 
 ## Prerequisites
 
@@ -26,7 +26,7 @@ If the workspace lacks the required system table schemas, an account admin can r
 
 1. Clone this repo to Databricks workspace. 
   * Refer to this [documentation](https://docs.databricks.com/en/repos/git-operations-with-repos.html#run-git-operations-on-databricks-git-folders-repos) on how to use Git repo on Databricks. 
-2. Add the `main` notebook to a Databricks interactive cluster
+2. Attach the `main` notebook to a Databricks interactive cluster
 3. Follow the instruction in the `main` notebook
 
 ## Output
