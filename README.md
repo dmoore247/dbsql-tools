@@ -20,7 +20,7 @@ This tool automatically generates a dashboard to identify SQL workloads running 
 
 **Advanced Prerequisites**
 
-If the workspace lacks the required system table schemas, an account admin can run this tool to enable the system schemas and grant the necessary permissions to users.
+If the workspace lacks the required system table schemas, an account admin can run this tool to enable the system schemas. After that, a metastore admin can grant the necessary permissions to users.
 
 ## Installation
 
