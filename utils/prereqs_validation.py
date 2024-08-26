@@ -82,7 +82,10 @@ class PrerequisiteValidator:
             print("You do not have permission to query the system.information_schema table to check other permissions. Contact metastore admin for permission")
 
         
-
+    def list_warehouse(self):
+        acceptable_sizes = {'Medium', 'Large', 'X-Large', '2X-Large', '3X-Large', '4X-Large'}
+        acceptable_warehouses = [(x.id, x.name, x.cluster_size) for x in w.warehouses.list() if x.cluster_size in acceptable_sizes]
+        return acceptable_warehouses
 
     def validate_warehouse(self):
         """
@@ -102,10 +105,7 @@ class PrerequisiteValidator:
         """
 
         # List of DBSQL warehouses for the Lakeview dashboard
-        warehouses = [(x.name, x.cluster_size) for x in w.warehouses.list()]
-
-        acceptable_sizes = {'Medium', 'Large', 'X-Large', '2X-Large', '3X-Large', '4X-Large'}
-        acceptable_warehouses = [size for _, size in warehouses if size in acceptable_sizes]
+        acceptable_warehouses = self.list_warehouse()
 
         if not acceptable_warehouses:
             result = self.ValidationResult(requirement='warehouse', is_pass=False, error="Please have at least a Medium or Larger warehouse available")

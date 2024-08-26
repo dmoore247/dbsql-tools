@@ -30,10 +30,11 @@ class LakeviewDashManager:
         dashboard_id = dashboard.dashboard_id
         return f"https://{self.host}/sql/dashboardsv3/{dashboard_id}"
     
-    def update_dash(self, dashboard_id):
+    def update_dash(self, dashboard_id, warehouse_id=None):
         dashboard = w.lakeview.update(
             dashboard_id=dashboard_id,
-            serialized_dashboard=json.dumps(self.lakeview_json)
+            serialized_dashboard=json.dumps(self.lakeview_json),
+            warehouse_id=warehouse_id
             )
         return f"https://{self.host}/sql/dashboardsv3/{dashboard_id}"
     
