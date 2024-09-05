@@ -5,6 +5,11 @@ DBSQL Serverless is Databricks' best SQL product. Databricks customers demanded 
 
 <img width="661" alt="image" src="https://github.com/user-attachments/assets/6978e97a-d76e-4949-bcbf-ff7c45b04276">
 
+## Learn
+Short video tutorial on the "Shift Right" program, pre-requsites, installation and operations.
+[![Video Title](https://img.youtube.com/vi/KfrKfXLXwNw/0.jpg)](https://www.youtube.com/watch?v=KfrKfXLXwNw)
+
+
 ## Prepare
 The dashboard and the user importing and 'owning' the dashboard needs access to system table schemas:
 - `system.access` (audit table)
