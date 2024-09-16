@@ -39,7 +39,7 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC # Step 1: Check for Prerequisistes
+# MAGIC # Step 1: Check for Prerequisites
 # MAGIC
 # MAGIC 1. Required System tables enabled. The following system tables are required to run the dashboard:
 # MAGIC   * `system.access.audit`
