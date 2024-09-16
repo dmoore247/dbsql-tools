@@ -7,7 +7,11 @@ Databricks customers have been eager for data warehousing solutions on their clo
 
 This tool automatically generates a dashboard to identify SQL workloads running on Interactive Clusters, which would be more efficiently managed by more specialized DBSQL Warehouse endpoints.
 
-## Prerequisites
+## Learn
+Short video tutorial on the "Shift Right" program, pre-requsites, installation and operations.
+[![Video Title](https://img.youtube.com/vi/KfrKfXLXwNw/0.jpg)](https://www.youtube.com/watch?v=KfrKfXLXwNw)
+
+## Prepare
 
 **Basic Prerequisites**
 
