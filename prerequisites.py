@@ -53,7 +53,7 @@ for schema_name in REQUIRED_SYSTEM_SCHEMAS:
 # COMMAND ----------
 
 # DBTITLE 1,Grant access to users
-users = input("Provide list of users to grant access to system tables, separating by commas: ")
+users = input("Provide list of users to grant access to system tables, separating by commas. For example abc@gmail.com, xyz@gmail.com: ")
 
 # COMMAND ----------
 

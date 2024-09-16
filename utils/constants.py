@@ -16,4 +16,4 @@ USERNAME = get_context().user
 METASTORE_ID = w.metastores.current().metastore_id
 
 REQUIRED_SYSTEM_TABLES = ["system.access.audit", "system.compute.clusters", "system.billing.usage"]
-REQUIRED_SYSTEM_SCHEMAS = ["compute", "access"]
+REQUIRED_SYSTEM_SCHEMAS = ["billing", "compute", "access", "information_schema"]
