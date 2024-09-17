@@ -26,7 +26,7 @@ If the workspace lacks the required system table schemas, an account admin can r
 
 1. Clone this repo to Databricks workspace. 
   * Refer to this [documentation](https://docs.databricks.com/en/repos/git-operations-with-repos.html#run-git-operations-on-databricks-git-folders-repos) on how to use Git repo on Databricks. 
-2. Attach the `main` notebook to a Databricks interactive cluster
+2. Attach the `main` notebook to a Databricks interactive UC-enabled cluster DBR14.3+
 3. Follow the instruction in the `main` notebook
 
 ## Output
