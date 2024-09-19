@@ -16,7 +16,11 @@ Short video tutorial on the "Shift Right" program, pre-requsites, installation a
 **Basic Prerequisites**
 
 * Databricks workspace with Unity Catalog and 3 system table schemas (access, billing, compute) enabled
+
 * Make sure `Verbose Audit Logs`  under Settings > Workspace Admin > Advanced > Other section is enabled
+
+  <img width="661" alt="image" src="https://github.com/anhhchu/dbsql-tools/blob/main/audit_logs.png?raw=true">
+
 * The user executing this tool needs the following permissions:
   SELECT permission to below system tables:
     * system.access (audit table)
