@@ -16,11 +16,15 @@ Short video tutorial on the "Shift Right" program, pre-requsites, installation a
 **Basic Prerequisites**
 
 * Databricks workspace with Unity Catalog and 3 system table schemas (access, billing, compute) enabled
-* The user executing this tool needs the following permissions:
-  SELECT permission to below system tables:
+
+* The user executing this tool needs at least `SELECT` permission to below system tables:
     * system.access (audit table)
     * system.billing (usage table)
-    * system.compute and (cluster and node_timeline tables)
+    * system.compute (cluster and node_timeline tables)
+ 
+* Make sure `Verbose Audit Logs`  under Settings > Workspace Admin > Advanced > Other section is enabled
+
+  <img width="661" alt="image" src="https://github.com/anhhchu/dbsql-tools/blob/main/audit_logs.png?raw=true">
 
 **Advanced Prerequisites**
 
@@ -33,8 +37,14 @@ If the workspace lacks the required system table schemas, an account admin can r
 2. Attach the `main` notebook to a Databricks interactive UC-enabled cluster DBR14.3+
 3. Follow the instruction in the `main` notebook
 
-## Output
+## Output & Action
 
-A dashboard will be generated to identify SQL workloads running on Interactive Clusters similar to below:
+A dashboard will be generated to identify SQL workloads running on Interactive Clusters similar to below screenshot
+
+**Recommended Actions:**
+1. Switch the interactive clusters used in all the notebooks in SQL Notebooks view to DBSQL Warehouses
+2. The DBUs savings is estimated to be the difference between Interactive Cluster Costs and DBSQL Costs
+3. Continue to monitor the dashboard to enforce this best practice in your organization
 
 <img width="661" alt="image" src="https://github.com/anhhchu/dbsql-tools/blob/main/sample_dashboard.png?raw=true">
+
